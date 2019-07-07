@@ -84,7 +84,7 @@ function showModal(pokemon) {
   var closeButton = $('<button class="modal-close">Close</button>');
   closeButton.on('click', hideModal);
 
-  if(exist)$modalContainer.remove(exist);
+  if(exist)exist.remove();
 
   var name = $('<h1>' + pokemon.name + '</h1>');
 
