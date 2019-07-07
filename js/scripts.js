@@ -13,11 +13,17 @@ var pokemonRepository = (function(){
 
   function loadList(){
     return $.ajax(apiUrl, {dataType: 'json'}).then(function(item){
+
+      $.each(item.results, function(index, item){
+        //Uncomment the line below to see index in the callback function in $.each()
+        //console.log('response object ', index);
         var pokemon = {
           name: item.name,
           detailsUrl: item.url
         }
-        .add(pokemon)
+        add(pokemon)
+      })
+
       }).catch(function(e){
       console.error(e);
     });
@@ -27,7 +33,8 @@ var pokemonRepository = (function(){
   function loadDetails(item){
     var url = item.detailsUrl;
     return $.ajax(url).then(function(details){
-      console.log('Item details', details);
+      //Uncomment the line below to log index
+      //console.log('Item details', details);
       // Now we add the details to the item
       item.imageUrl = details.sprites.front_default;
       item.height = details.height;
@@ -71,13 +78,13 @@ function showDetails(pokemon){
 function showModal(pokemon) {
   var modal = $('<div class="modal"></div>');
 
-  var exist = $modalContainer.$('.modal');
+  var exist = $('.modal');
 
   // Add the new modal content
   var closeButton = $('<button class="modal-close">Close</button>');
   closeButton.on('click', hideModal);
 
-  if(exist)$modalContainer.removeChild(exist);
+  if(exist)$modalContainer.remove(exist);
 
   var name = $('<h1>' + pokemon.name + '</h1>');
 
@@ -87,7 +94,7 @@ function showModal(pokemon) {
   image.attr('src', pokemon.imageUrl);
 
   modal
-  .apend(closeButton)
+  .append(closeButton)
   .append(name)
   .append(height)
   .append(image)
@@ -112,8 +119,10 @@ $(window).on('keydown', (e) => {
 })
 
 pokemonRepository.loadList().then(function(){
-  pokemonRepository.getAll().each(function(pokemon){
-    addListItem(pokemon);
+  var pokemons = pokemonRepository.getAll();
+
+  $.each(pokemons, function(index, pokemon){
+        addListItem(pokemon);
   });
 });
 })();
