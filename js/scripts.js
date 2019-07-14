@@ -38,7 +38,11 @@ var pokemonRepository = (function(){
       // Now we add the details to the item
       item.imageUrl = details.sprites.front_default;
       item.height = details.height;
-      item.types = Object.keys(details.types);
+      item.types = details.types.map(function(pokemon){
+          return pokemon.type.name;
+      });
+      //Uncommentthe line below to see types
+      //console.log(item.types);
     }).catch(function(e){
       console.error(e);
     });
@@ -52,12 +56,17 @@ var pokemonRepository = (function(){
   };
 })();
 
-var $pokemonList = $('pokemon-list')
+var $pokemonList = $('.pokemon-list')
 
 function addListItem(pokemon){
-  var listItem = $('.pokemon-list_item');
+  var listItem = $('<button type="button" class="pokemon-list_item list-group-item list-group-item-action" data-toggle="modal" data-target="#pokemon-modal"></button>');
   listItem.text(pokemon.name);
   $pokemonList.append(listItem);
+//Uncomment the line below if you want to see the list of pokemon.
+//console.log(pokemon);
+  listItem.click(function() {
+    showDetails(pokemon)
+  });
 }
 
 /*************
@@ -66,13 +75,22 @@ Display modal about pokemon details
 
 function showDetails(pokemon){
   pokemonRepository.loadDetails(pokemon).then(function() {
-
-    var name = $('#pokemon-name').text(pokemon.name);
-
-    var height = $('.modal-body').text(pokemon.height);
-
-    var image = $('#pokemon-picture');
+    var modal = $('.modal-body');
+    var name = $('.modal-title').text(pokemon.name);
+    var height = $('<p class="pokemon-height"></p>').text('Height: ' + pokemon.height);
+    var type = $('<p class="pokemon-type"></p>').text('Type: ' + pokemon.types);
+    var image = $('<img class="pokemon-picture">');
     image.attr('src', pokemon.imageUrl);
+
+
+    if(modal.children().length) {
+      modal.children().remove();
+    }
+
+    modal.append(image)
+         .append(height)
+         .append(type);
+
   });
 }
 
