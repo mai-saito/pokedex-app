@@ -1,3 +1,4 @@
+/* global $ */
 (function(){
 var pokemonRepository = (function(){
   var repository =[];
@@ -25,6 +26,7 @@ var pokemonRepository = (function(){
       })
 
       }).catch(function(e){
+      /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
       console.error(e);
     });
   }
@@ -38,10 +40,11 @@ var pokemonRepository = (function(){
       // Now we add the details to the item
       item.imageUrl = details.sprites.front_default;
       item.height = details.height;
-      item.types = details.types.map(function(pokemon){
-          return pokemon.type.name;
-      });
-      //Uncommentthe line below to see types
+      item.types = details.types.map(function(pokemon) {
+  return pokemon.type.name;
+});
+
+      //Uncomment the line below to see types
       //console.log(item.types);
     }).catch(function(e){
       console.error(e);
@@ -76,6 +79,7 @@ Display modal about pokemon details
 function showDetails(pokemon){
   pokemonRepository.loadDetails(pokemon).then(function() {
     var modal = $('.modal-body');
+    /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "name" }]*/
     var name = $('.modal-title').text(pokemon.name);
     var height = $('<p class="pokemon-height"></p>').text('Height: ' + pokemon.height);
     var type = $('<p class="pokemon-type"></p>').text('Type: ' + pokemon.types);
