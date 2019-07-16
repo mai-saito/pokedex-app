@@ -98,6 +98,19 @@ function showDetails(pokemon){
   });
 }
 
+/****************
+Search pokemons
+*****************/
+
+$(document).ready(function(){
+  $('#pokemon-search').on('keyup', function(){
+    var value = $(this).val().toLowerCase();
+    $('.pokemon-list_item').filter(function(){
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
 pokemonRepository.loadList().then(function(){
   var pokemons = pokemonRepository.getAll();
 
